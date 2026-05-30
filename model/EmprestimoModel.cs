@@ -1,4 +1,4 @@
-namespace model;
+namespace SistemaBibliotecario.Model;
 
 public class EmprestimoModel
 {
@@ -8,4 +8,13 @@ public class EmprestimoModel
     public DateTime DataDevolucao { get; set; }
     public bool Disponivel { get; set; }
     public decimal Multa { get; set; }
+
+    public EmprestimoModel(int exemplarID, DateTime dataEmprestimo, DateTime dataDevolucao, bool disponivel, decimal multa)
+    {
+        ExemplarID = exemplarID;
+        DataEmprestimo = dataEmprestimo;
+        DataDevolucao = dataDevolucao;
+        Disponivel = disponivel;
+        Multa = multa;
+    }
 }

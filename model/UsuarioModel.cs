@@ -1,12 +1,22 @@
-namespace model;
+namespace SistemaBibliotecario.Model;
 
 public class UsuarioModel
 {
     public int ID { get; set; }
-    public string Nome { get; set; }
-    public string Email { get; set; }
-    public string Telefone { get; set; }
+    public required string Nome { get; set; }
+    public required string Email { get; set; }
+    public required string Telefone { get; set; }
     public DateTime DataCadastro { get; set; }
-    public string TipoUsuario { get; set; }
-    public string Status { get; set; }
+    public required string TipoUsuario { get; set; }
+    public required string Status { get; set; }
+
+    public UsuarioModel(string nome, string email, string telefone, DateTime dataCadastro, string tipoUsuario, string status)
+    {
+        Nome = nome;
+        Email = email;
+        Telefone = telefone;
+        DataCadastro = dataCadastro;
+        TipoUsuario = tipoUsuario;
+        Status = status;
+    }
 }
