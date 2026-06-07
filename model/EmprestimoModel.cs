@@ -9,6 +9,8 @@ public class EmprestimoModel
     public bool Disponivel { get; set; }
     public decimal Multa { get; set; }
 
+    public EmprestimoModel() { }
+
     public EmprestimoModel(int exemplarID, DateTime dataEmprestimo, DateTime dataDevolucao, bool disponivel, decimal multa)
     {
         ExemplarID = exemplarID;

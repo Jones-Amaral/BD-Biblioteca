@@ -10,6 +10,10 @@ public class UsuarioModel
     public required string TipoUsuario { get; set; }
     public required string Status { get; set; }
 
+    public UsuarioModel()
+    {
+    }
+
     public UsuarioModel(string nome, string email, string telefone, DateTime dataCadastro, string tipoUsuario, string status)
     {
         Nome = nome;

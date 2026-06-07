@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace SistemaBibliotecario.Model;
 
 public class FuncionarioModel
@@ -8,6 +10,7 @@ public class FuncionarioModel
     public decimal Salario { get; set; }
     public DateTime DataContratacao { get; set; }
 
+    [SetsRequiredMembers]
     public FuncionarioModel(string nome, string cargo, decimal salario, DateTime dataContratacao)
     {
         Nome = nome;
