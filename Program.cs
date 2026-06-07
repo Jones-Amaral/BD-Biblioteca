@@ -1,11 +1,18 @@
 ﻿using SistemaBibliotecario.Shared;
 using Microsoft.Extensions.Configuration;
+using SistemaBibliotecario.Shared.Interfaces;
+using System.Threading.Tasks;
 
 namespace SistemaBibliotecario;
 
 class Program
 {
-    static void Main()
+    private readonly IConsulta _consulta;
+    public Program(IConsulta consulta)
+    {
+        _consulta = consulta;
+    }
+    static async Task Main()
     {
         // Carregar configurações do appsettings.json
         var basePath = AppContext.BaseDirectory;
@@ -28,5 +35,8 @@ class Program
         {
             Console.WriteLine("Falha ao abrir a conexão.");
         }
+
+        await _consulta.ConsultarLivrosAsync();
+        Console.Readkey();
     }
 }

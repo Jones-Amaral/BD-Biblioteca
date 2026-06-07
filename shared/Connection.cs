@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace SistemaBibliotecario.Shared
 {
-    class Conexao
+    public class Connection : IConnection
     {
         private static MySqlConnection? conexao;
         private static IConfiguration? configuration;
