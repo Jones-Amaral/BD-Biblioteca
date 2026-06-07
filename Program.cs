@@ -32,9 +32,16 @@ class Program
             return;
         }
 
+        var usuarioService = new UsuarioService(new UsuarioRepository(connection));
+
         try
         {
-            await MostrarMenuAsync(connection);
+            if (!await MostrarTelaUsuarioAsync(usuarioService))
+            {
+                return;
+            }
+
+            await MostrarMenuAsync(connection, usuarioService);
         }
         catch (Exception ex)
         {
@@ -50,13 +57,12 @@ class Program
         Console.ReadKey();
     }
 
-    private static async Task MostrarMenuAsync(IConnection connection)
+    private static async Task MostrarMenuAsync(IConnection connection, IUsuarioService usuarioService)
     {
         var livroService = new LivroService(new LivroRepository(connection));
         var autorService = new AutorService(new AutorRepository(connection));
         var bibliotecaService = new BibliotecaService(new BibliotecaRepository(connection));
         var funcionarioService = new FuncionarioService(new FuncionarioRepository(connection));
-        var usuarioService = new UsuarioService(new UsuarioRepository(connection));
         var emprestimoService = new EmprestimoService(new EmprestimoRepository(connection));
         var consultaService = new ConsultaService(new ConsultaRepository(connection));
 
@@ -75,47 +81,47 @@ class Program
                 break;
             }
 
-            switch (opcao)
-            {
-                case "1":
-                    await ExecutarRegistroLivroAsync(livroService);
-                    break;
-                case "2":
-                    await ExecutarRegistroAutorAsync(autorService);
-                    break;
-                case "3":
-                    await ExecutarRegistroBibliotecaAsync(bibliotecaService);
-                    break;
-                case "4":
-                    await ExecutarRegistroFuncionarioAsync(funcionarioService);
-                    break;
-                case "5":
-                    await ExecutarCadastroUsuarioAsync(usuarioService);
-                    break;
-                case "6":
-                    await ExecutarConsultaLivrosAsync(livroService);
-                    break;
-                case "7":
-                    await ExecutarConsultaAutoresAsync(autorService);
-                    break;
-                case "8":
-                    await ExecutarConsultaBibliotecasAsync(bibliotecaService);
-                    break;
-                case "9":
-                    await ExecutarConsultaFuncionariosAsync(funcionarioService);
-                    break;
-                case "10":
-                    await ExecutarExcluirLivroAsync(livroService);
-                    break;
-                case "11":
-                    await ExecutarExcluirFuncionarioAsync(funcionarioService);
-                    break;
-                case "12":
-                    await ExecutarRegistroEmprestimoAsync(emprestimoService);
-                    break;
-                case "13":
-                    await ExecutarMenuConsultasAsync(consultaService);
-                    break;
+        switch (opcao)
+        {
+            case "1":
+                await ExecutarRegistroLivroAsync(livroService);
+                break;
+            case "2":
+                await ExecutarRegistroAutorAsync(autorService);
+                break;
+            case "3":
+                await ExecutarRegistroBibliotecaAsync(bibliotecaService);
+                break;
+            case "4":
+                await ExecutarRegistroFuncionarioAsync(funcionarioService);
+                break;
+            case "5":
+                await ExecutarConsultaLivrosAsync(livroService);
+                break;
+            case "6":
+                await ExecutarConsultaAutoresAsync(autorService);
+                break;
+            case "7":
+                await ExecutarConsultaBibliotecasAsync(bibliotecaService);
+                break;
+            case "8":
+                await ExecutarConsultaFuncionariosAsync(funcionarioService);
+                break;
+            case "9":
+                await ExecutarExcluirLivroAsync(livroService);
+                break;
+            case "10":
+                await ExecutarExcluirFuncionarioAsync(funcionarioService);
+                break;
+            case "11":
+                await ExecutarRegistroEmprestimoAsync(emprestimoService);
+                break;
+            case "12":
+                await ExecutarMenuConsultasAsync(consultaService);
+                break;
+            case "13":
+                await ExecutarAlterarSenhaAsync(usuarioService);
+                break;
                 default:
                     Console.WriteLine("Opção inválida. Tente novamente.");
                     break;
@@ -136,21 +142,58 @@ class Program
         Console.WriteLine();
     }
 
+    private static async Task<bool> MostrarTelaUsuarioAsync(IUsuarioService usuarioService)
+    {
+        while (true)
+        {
+            Console.Clear();
+            Console.WriteLine("--- Menu de Usuário ---");
+            Console.WriteLine("1 - Registrar usuário");
+            Console.WriteLine("2 - Fazer login");
+            Console.WriteLine("3 - Sair");
+            Console.WriteLine();
+            Console.Write("Digite a opção desejada: ");
+            var opcao = Console.ReadLine()?.Trim();
+
+            switch (opcao)
+            {
+                case "1":
+                    await ExecutarCadastroUsuarioAsync(usuarioService);
+                    break;
+                case "2":
+                    if (await ExecutarLoginAsync(usuarioService))
+                    {
+                        return true;
+                    }
+                    break;
+                case "3":
+                    return false;
+                default:
+                    Console.WriteLine("Opção inválida. Tente novamente.");
+                    break;
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Pressione ENTER para continuar...");
+            Console.ReadLine();
+        }
+    }
+
     private static void ExibirOpcoes()
     {
         Console.WriteLine("1 - Registrar livro");
         Console.WriteLine("2 - Registrar autor");
         Console.WriteLine("3 - Registrar biblioteca");
         Console.WriteLine("4 - Registrar funcionário");
-        Console.WriteLine("5 - Registrar usuário");
-        Console.WriteLine("6 - Consultar livros");
-        Console.WriteLine("7 - Consultar autores");
-        Console.WriteLine("8 - Consultar bibliotecas");
-        Console.WriteLine("9 - Consultar funcionários");
-        Console.WriteLine("10 - Excluir livro");
-        Console.WriteLine("11 - Excluir funcionário");
-        Console.WriteLine("12 - Registrar empréstimo");
-        Console.WriteLine("13 - Consultas SQL");
+        Console.WriteLine("5 - Consultar livros");
+        Console.WriteLine("6 - Consultar autores");
+        Console.WriteLine("7 - Consultar bibliotecas");
+        Console.WriteLine("8 - Consultar funcionários");
+        Console.WriteLine("9 - Excluir livro");
+        Console.WriteLine("10 - Excluir funcionário");
+        Console.WriteLine("11 - Registrar empréstimo");
+        Console.WriteLine("12 - Consultas SQL");
+        Console.WriteLine("13 - Alterar senha de usuário");
         Console.WriteLine("14 - Sair");
         Console.WriteLine();
     }
@@ -174,7 +217,7 @@ class Program
         }
     }
 
-    private static async Task ExecutarCadastroUsuarioAsync(UsuarioService usuarioService)
+    private static async Task ExecutarCadastroUsuarioAsync(IUsuarioService usuarioService)
     {
         Console.WriteLine();
         Console.WriteLine("--- Cadastro de usuário ---");
@@ -194,6 +237,15 @@ class Program
         Console.Write("Status (Ativo/Inativo): ");
         var status = Console.ReadLine()?.Trim() ?? string.Empty;
 
+        var senha = LerSenha("Senha: ");
+        var confirmaSenha = LerSenha("Confirme a senha: ");
+
+        if (senha != confirmaSenha)
+        {
+            Console.WriteLine("As senhas não coincidem. Tente novamente.");
+            return;
+        }
+
         var usuario = new UsuarioModel
         {
             Nome = nome,
@@ -201,11 +253,85 @@ class Program
             Telefone = telefone,
             DataCadastro = DateTime.Now,
             TipoUsuario = string.IsNullOrWhiteSpace(tipoUsuario) ? "Aluno" : tipoUsuario,
-            Status = string.IsNullOrWhiteSpace(status) ? "Ativo" : status
+            Status = string.IsNullOrWhiteSpace(status) ? "Ativo" : status,
+            SenhaHash = string.Empty
         };
 
-        var sucesso = await usuarioService.RegistrarAsync(usuario);
-        Console.WriteLine(sucesso ? "Usuário cadastrado com sucesso." : "Falha ao cadastrar usuário.");
+        var sucesso = await usuarioService.RegistrarAsync(usuario, senha);
+        Console.WriteLine(sucesso ? "Usuário cadastrado com sucesso." : "Falha ao cadastrar usuário. Verifique se o e-mail já existe ou se a senha tem pelo menos 6 caracteres.");
+    }
+
+    private static async Task<bool> ExecutarLoginAsync(IUsuarioService usuarioService)
+    {
+        Console.WriteLine();
+        Console.WriteLine("--- Login de usuário ---");
+
+        Console.Write("Email: ");
+        var email = Console.ReadLine()?.Trim() ?? string.Empty;
+        var senha = LerSenha("Senha: ");
+
+        var autenticado = await usuarioService.AutenticarAsync(email, senha);
+        if (autenticado)
+        {
+            Console.WriteLine("Login realizado com sucesso. Bem-vindo!");
+            return true;
+        }
+
+        Console.WriteLine("Falha no login. Verifique e-mail, senha ou status do usuário.");
+        return false;
+    }
+
+    private static async Task ExecutarAlterarSenhaAsync(IUsuarioService usuarioService)
+    {
+        Console.WriteLine();
+        Console.WriteLine("--- Alterar senha de usuário ---");
+
+        Console.Write("Email: ");
+        var email = Console.ReadLine()?.Trim() ?? string.Empty;
+
+        var senhaAtual = LerSenha("Senha atual: ");
+        var novaSenha = LerSenha("Nova senha: ");
+        var confirmaNova = LerSenha("Confirme a nova senha: ");
+
+        if (novaSenha != confirmaNova)
+        {
+            Console.WriteLine("As senhas não coincidem. Tente novamente.");
+            return;
+        }
+
+        var alterou = await usuarioService.AlterarSenhaAsync(email, senhaAtual, novaSenha);
+        Console.WriteLine(alterou ? "Senha alterada com sucesso." : "Falha ao alterar senha. Verifique e-mail, senha atual ou requisitos da nova senha.");
+    }
+
+    private static string LerSenha(string prompt)
+    {
+        Console.Write(prompt);
+        var senha = string.Empty;
+
+        while (true)
+        {
+            var tecla = Console.ReadKey(true);
+            if (tecla.Key == ConsoleKey.Enter)
+            {
+                Console.WriteLine();
+                break;
+            }
+
+            if (tecla.Key == ConsoleKey.Backspace && senha.Length > 0)
+            {
+                senha = senha[..^1];
+                Console.Write("\b \b");
+                continue;
+            }
+
+            if (!char.IsControl(tecla.KeyChar))
+            {
+                senha += tecla.KeyChar;
+                Console.Write("*");
+            }
+        }
+
+        return senha;
     }
 
     private static async Task ExecutarRegistroEmprestimoAsync(EmprestimoService emprestimoService)

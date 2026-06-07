@@ -8,7 +8,7 @@ Sistema gerenciador de bibliotecas desenvolvido em C# com .NET 10.0 e MySQL. Est
 
 ---
 
-## ?? Pr�-requisitos
+##  Pre-requisitos
 
 Antes de executar o projeto, certifique-se de ter os seguintes requisitos instalados:
 
@@ -19,12 +19,12 @@ Antes de executar o projeto, certifique-se de ter os seguintes requisitos instal
 
 ---
 
-## ?? Configura��o Inicial
+## ?? Configuração Inicial
 
 ### 1. Clonar ou Baixar o Projeto
 
 ```bash
-git clone <seu-repositório>
+git clone https://github.com/Jones-Amaral/BD-Biblioteca.git
 cd BD-Biblioteca
 ```
 

@@ -9,12 +9,13 @@ public class UsuarioModel
     public DateTime DataCadastro { get; set; }
     public required string TipoUsuario { get; set; }
     public required string Status { get; set; }
+    public required string SenhaHash { get; set; }
 
     public UsuarioModel()
     {
     }
 
-    public UsuarioModel(string nome, string email, string telefone, DateTime dataCadastro, string tipoUsuario, string status)
+    public UsuarioModel(string nome, string email, string telefone, DateTime dataCadastro, string tipoUsuario, string status, string senhaHash)
     {
         Nome = nome;
         Email = email;
@@ -22,5 +23,6 @@ public class UsuarioModel
         DataCadastro = dataCadastro;
         TipoUsuario = tipoUsuario;
         Status = status;
+        SenhaHash = senhaHash;
     }
 }
